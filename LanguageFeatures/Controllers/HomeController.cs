@@ -36,11 +36,13 @@ namespace LanguageFeatures.Controllers
             // tworzenie nowego obiektu Product
             Product myProduct = new Product
             {
-                ProductID = 100, Name ="Kajak",
+                ProductID = 100,
+                Name = "Kajak",
                 Description = "Łódka jednoosobowa",
-                Price = 275M, Category = "Sporty wodne"
-            };            
-            
+                Price = 275M,
+                Category = "Sporty wodne"
+            };
+
 
             return View("Result", (object)String.Format("Kategoria: {0}", myProduct.Category));
         }
@@ -151,6 +153,87 @@ namespace LanguageFeatures.Controllers
             return View("Result", (object)result.ToString());
         }
 
+        public ViewResult FindProducts()
+        {
+            Product[] products =
+            {
+                new Product {Name = "Kajak", Category = "Sporty wodne", Price = 275M},
+                new Product {Name = "Kamizelka ratunkowa", Category="Sporty wodne", Price = 48.95M},
+                new Product {Name = "Piłka nożna", Category="Piłka nożna", Price = 19.50M},
+                new Product {Name = "Flaga narożna", Category="Piłka nożna", Price = 34.95M}
+            };
 
+            // definiowanie tablicy do przechowywania wyników
+            Product[] results = new Product[3];
+
+            // posortowanie tablicy
+            Array.Sort(products, (item1, item2) =>
+            {
+                return Comparer<decimal>.Default.Compare(item1.Price, item2.Price);
+            });
+
+            // odczytanie pierwszych trzech pozycji w tablicy
+            Array.Copy(products, results, 3);
+
+            // przygotowanie danych wyjściowych
+            StringBuilder result = new StringBuilder();
+            foreach (Product p in results)
+            {
+                result.AppendFormat("Cena: {0} ", p.Price);
+            }
+            return View("Result", (object)result.ToString());
+
+        }
+
+        public ViewResult FindProductWithLinq()
+        {
+            Product[] products =
+            {
+                new Product {Name = "Kajak", Category = "Sporty wodne", Price = 275M},
+                new Product {Name = "Kamizelka ratunkowa", Category="Sporty wodne", Price = 48.95M},
+                new Product {Name = "Piłka nożna", Category="Piłka nożna", Price = 19.50M},
+                new Product {Name = "Flaga narożna", Category="Piłka nożna", Price = 34.95M}
+            };
+
+            var foundProducts = from match in products
+                                orderby match.Price descending
+                                select new { match.Name, match.Price };
+
+            // przygotowanie danych wyjściowych
+            int count = 0;
+            StringBuilder result = new StringBuilder();
+            foreach (var p in foundProducts)
+            {
+                result.AppendFormat("Cena: {0} ", p.Price);
+                if (++count == 3)
+                {
+                    break;
+                }
+            }
+
+            return View("Result", (object)result.ToString());
+        }
+
+        //public ViewResult FindProductWithLinq2()
+        //{
+        //    Product[] products = {
+        //        new Product {Name = "Kajak", Category="Sporty wodne", Price = 275M},
+        //        new Product {Name = "Kamizelka ratunkowa", Category="Sporty wodne", Price = 48.95M},
+        //        new Product {Name = "Piłka nożna", Category="Piłka nożna", Price = 19.50M},
+        //        new Product {Name = "Flaga narożna", Category="Piłka nożna", Price = 34.95M}
+        //    };
+
+            //var foundProducts = products.OrderByDescending(e => e.Price)
+            //    .Take(3)
+            //    .Select(e => new { e.Name, e.Price });
+
+            //StringBuilder result = new StringBuilder();
+            //foreach (Product p in foundProducts)
+            //{
+            //    result.AppendFormat("Cena: {0} ", p.Price);
+            //}
+
+            //return View("Result", (object)result.ToString());
+        //}
     }
 }
