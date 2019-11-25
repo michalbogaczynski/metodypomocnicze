@@ -223,17 +223,58 @@ namespace LanguageFeatures.Controllers
         //        new Product {Name = "Flaga narożna", Category="Piłka nożna", Price = 34.95M}
         //    };
 
-            //var foundProducts = products.OrderByDescending(e => e.Price)
-            //    .Take(3)
-            //    .Select(e => new { e.Name, e.Price });
+        //var foundProducts = products.OrderByDescending(e => e.Price)
+        //    .Take(3)
+        //    .Select(e => new { e.Name, e.Price });
 
-            //StringBuilder result = new StringBuilder();
-            //foreach (Product p in foundProducts)
-            //{
-            //    result.AppendFormat("Cena: {0} ", p.Price);
-            //}
-
-            //return View("Result", (object)result.ToString());
+        //StringBuilder result = new StringBuilder();
+        //foreach (Product p in foundProducts)
+        //{
+        //    result.AppendFormat("Cena: {0} ", p.Price);
         //}
+
+        //return View("Result", (object)result.ToString());
+        //}
+
+        //public ViewResult FindProductLinqOpoznione()
+        //{
+        //    Product[] products =
+        //    {
+        //        new Product {Name = "Kajak", Category = "Sporty wodne", Price = 275M},
+        //        new Product {Name = "Kamizelka ratunkowa", Category="Sporty wodne", Price = 48.95M},
+        //        new Product {Name = "Piłka nożna", Category="Piłka nożna", Price = 19.50M},
+        //        new Product {Name = "Flaga narożna", Category="Piłka nożna", Price = 34.95M}
+        //    };
+
+        //    var foundProducts = products.OrderByDescending(e => e.Price)
+        //        .Take(3)
+        //        .Select(e => new
+        //        {
+        //            e.Name,
+        //            e.Price
+        //        });
+
+        //    products[2] = new Product { Name = "Stadion", Price = 79600M };
+
+        //    StringBuilder result = new StringBuilder();
+        //    foreach (Product p in foundProducts)
+        //    {
+        //        result.Append("Cena: {0} ", p.Price);
+        //    }
+        //    return View("Result", (object)result.ToString());
+        //}
+
+        public ViewResult SumProducts()
+        {
+            Product[] products = {
+                new Product {Name = "Kajak", Category="Sporty wodne", Price = 275M},
+                new Product {Name = "Kamizelka ratunkowa", Category="Sporty wodne", Price = 48.95M},
+                new Product {Name = "Piłka nożna", Category="Piłka nożna", Price = 19.50M},
+                new Product {Name = "Flaga narożna", Category="Piłka nożna", Price = 34.95M}
+                };
+            var results = products.Sum(e => e.Price);
+            products[2] = new Product { Name = "Stadion", Price = 79500M };
+            return View("Result", (object)String.Format("Suma: {0:c)", results));
+        }
     }
 }
